@@ -21,7 +21,7 @@ A aplicação usa apenas a biblioteca padrão do Python. Não é necessário ins
 ## Visualizadores
 
 - **Archeevo:** disponível. O adaptador usa os pontos de acesso públicos do próprio visualizador.
-- **Digitarq:** reservado na arquitetura; será implementado e testado quando existir um endereço de exemplo.
+- **Digitarq:** disponível para endereços `/fileViewer/{id}`. O adaptador consulta os metadados e a lista paginada de objetos digitais, usando a disseminação original ou a miniatura pública de cada ficheiro.
 - **Outros:** podem ser adicionados criando um novo adaptador em `archive_pdf/adapters` e registando-o em `registry.py`.
 
 ## Funcionamento e privacidade

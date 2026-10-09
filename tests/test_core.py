@@ -5,6 +5,7 @@ import unittest
 from pathlib import Path
 
 from archive_pdf.adapters.archeevo import ArcheevoAdapter
+from archive_pdf.adapters.digitarq import DigitarqAdapter
 from archive_pdf.jobs import parse_page_selection, safe_filename
 
 
@@ -34,6 +35,32 @@ class AdapterTests(unittest.TestCase):
         self.assertEqual(
             ArcheevoAdapter._storage_url("https://example.org", "vault://ABC"),
             "https://example.org/api/storage/storageobject?objectId=vault%3A%2F%2FABC",
+        )
+
+    def test_digitarq_detection(self) -> None:
+        adapter = DigitarqAdapter()
+        self.assertTrue(
+            adapter.supports(
+                "https://digitarq.arquivos.pt/fileViewer/07cb68ec1a7a4028a2c0092919d021a1"
+                "?isRepresentation=false&selectedFile=38887125&fileType=IMAGE"
+            )
+        )
+        self.assertFalse(adapter.supports("https://digitarq.arquivos.pt/documentDetails/07cb68ec1a7a4028a2c0092919d021a1"))
+
+    def test_digitarq_metadata_helpers(self) -> None:
+        adapter = DigitarqAdapter()
+        self.assertEqual(
+            adapter._first_value(
+                [
+                    {"value": "Outro", "type": {"value": "FORMAL"}},
+                    {"value": "Livro de Registo", "type": {"value": "ATTRIBUTED"}},
+                ]
+            ),
+            "Livro de Registo",
+        )
+        self.assertEqual(
+            adapter._format_dates({"value": "1849-01-01"}, {"value": "1856-12-31"}),
+            "1849–1856",
         )
 
 

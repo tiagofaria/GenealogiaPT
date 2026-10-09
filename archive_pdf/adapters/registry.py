@@ -27,5 +27,5 @@ class AdapterRegistry:
     def capabilities(self) -> list[dict]:
         return [
             {"key": "archeevo", "label": "Archeevo", "status": "available"},
-            {"key": "digitarq", "label": "Digitarq", "status": "planned"},
+            {"key": "digitarq", "label": "Digitarq", "status": "available"},
         ]
