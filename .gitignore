@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+.runtime/
+tmp/
+
+# PDFs gerados pela aplicação (mantém a pasta através do .gitkeep)
+output/pdf/*.pdf
+!output/pdf/.gitkeep

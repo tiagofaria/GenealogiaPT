@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Descarrega imagens de visualizadores de arquivo e reúne-as num PDF.">
+  <title>Arquivo → PDF</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <header class="masthead">
+    <a class="brand" href="/" aria-label="Arquivo para PDF, início">
+      <span class="brand-mark" aria-hidden="true">A</span>
+      <span>Arquivo <i>→</i> PDF</span>
+    </a>
+    <span class="local-badge"><span></span> Aplicação local</span>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow">Uma ferramenta para investigação histórica</p>
+      <h1>Do visualizador<br>para um PDF.</h1>
+      <p class="lede">Cole o endereço de um documento digital. Nós encontramos as páginas, descarregamos as imagens pela ordem certa e reunimos tudo num único ficheiro.</p>
+    </section>
+
+    <section class="workspace" aria-labelledby="workspace-title">
+      <div class="step-rail" aria-hidden="true">
+        <div class="step active"><b>01</b><span>Endereço</span></div>
+        <div class="step"><b>02</b><span>Opções</span></div>
+        <div class="step"><b>03</b><span>PDF</span></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-heading">
+          <div>
+            <p class="section-number">01 · Identificar documento</p>
+            <h2 id="workspace-title">Onde estão as imagens?</h2>
+          </div>
+          <span class="privacy-note">O processamento fica neste computador</span>
+        </div>
+
+        <form id="inspect-form" class="url-form">
+          <label for="source-url">Endereço do visualizador</label>
+          <div class="input-row">
+            <input id="source-url" name="source-url" type="url" required spellcheck="false" autocomplete="url" placeholder="https://pesquisa.auc.uc.pt/viewer/descriptions/41652">
+            <button class="primary" type="submit" id="inspect-button">
+              <span>Analisar</span><span aria-hidden="true">→</span>
+            </button>
+          </div>
+          <p class="field-help">Compatível com instalações Archeevo. Outros visualizadores podem ser acrescentados por adaptadores.</p>
+        </form>
+
+        <div id="alert" class="alert" role="alert" hidden></div>
+
+        <section id="document-card" class="document-card" hidden aria-live="polite">
+          <div class="document-icon" aria-hidden="true"><span></span><span></span><span></span></div>
+          <div class="document-main">
+            <div class="document-tags"><span id="provider-tag">Archeevo</span><span id="date-tag"></span></div>
+            <h3 id="document-title"></h3>
+            <p id="document-reference"></p>
+            <p id="document-repository" class="repository"></p>
+          </div>
+          <div class="page-count"><strong id="page-count">0</strong><span>páginas</span></div>
+        </section>
+
+        <form id="job-form" hidden>
+          <div class="divider"></div>
+          <div class="panel-heading compact">
+            <div>
+              <p class="section-number">02 · Preparar o ficheiro</p>
+              <h2>Como quer o seu PDF?</h2>
+            </div>
+          </div>
+
+          <div class="options-grid">
+            <fieldset>
+              <legend>Qualidade das imagens</legend>
+              <label class="choice selected">
+                <input type="radio" name="quality" value="original" checked>
+                <span><b>Original</b><small>Melhor para ampliar e transcrever</small></span>
+                <em>Recomendado</em>
+              </label>
+              <label class="choice">
+                <input type="radio" name="quality" value="thumbnail">
+                <span><b>Leve</b><small>PDF menor, leitura rápida</small></span>
+              </label>
+            </fieldset>
+
+            <div class="field-stack">
+              <label for="pages">Páginas</label>
+              <input id="pages" type="text" placeholder="Todas">
+              <p class="field-help">Ex.: 1-20, 35, 42-50</p>
+              <label for="output-name">Nome do ficheiro</label>
+              <input id="output-name" type="text" maxlength="100">
+            </div>
+          </div>
+
+          <div class="action-bar">
+            <div><span id="selection-summary">Todas as páginas</span><small>As imagens são pedidas com pausas para respeitar o arquivo.</small></div>
+            <button class="primary create-button" type="submit" id="create-button"><span>Criar PDF</span><span aria-hidden="true">↓</span></button>
+          </div>
+        </form>
+
+        <section id="progress-section" class="progress-section" hidden aria-live="polite">
+          <div class="divider"></div>
+          <p class="section-number">03 · Criar o documento</p>
+          <div class="progress-header"><h2 id="progress-title">A preparar…</h2><strong id="progress-percent">0%</strong></div>
+          <div class="progress-track"><div id="progress-bar"></div></div>
+          <p id="progress-message" class="progress-message"></p>
+          <div class="progress-actions">
+            <button id="cancel-button" class="text-button" type="button">Interromper</button>
+            <button id="resume-button" class="secondary" type="button" hidden>Retomar</button>
+            <a id="download-button" class="primary download-button" href="#" hidden>Descarregar PDF <span aria-hidden="true">↓</span></a>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section class="providers" aria-labelledby="providers-title">
+      <div><p class="eyebrow">Arquitetura expansível</p><h2 id="providers-title">Um adaptador por visualizador.</h2></div>
+      <p>A recolha das imagens está separada da criação do PDF. Assim, cada novo arquivo precisa apenas do seu próprio adaptador — o resto da aplicação permanece igual.</p>
+      <div class="provider-list">
+        <div><span class="status ready"></span><b>Archeevo</b><small>Disponível</small></div>
+        <div><span class="status planned"></span><b>Digitarq</b><small>Preparado para a próxima versão</small></div>
+        <div><span class="status open"></span><b>Outros</b><small>Por pedido</small></div>
+      </div>
+    </section>
+  </main>
+
+  <footer><span>Arquivo → PDF</span><p>Use respeitando as condições do arquivo e os direitos de reprodução.</p></footer>
+  <script src="/app.js" defer></script>
+</body>
+</html>
